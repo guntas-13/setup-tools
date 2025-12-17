@@ -6,13 +6,15 @@
 
 ```docker pull --platform=linux/amd64 ubuntu:22.04```
 
-```docker run -it \
+```
+docker run -it \
   --name ubuntu-amd64-dev \
   --platform=linux/amd64 \
   -v $HOME/docker-work/ubuntu:/work \
   ubuntu:22.04 \
   bash
 ```
+
 ```docker start -ai ubuntu-amd64-dev```
 
 **Container Name**: `ubuntu-amd64-dev`
@@ -23,13 +25,16 @@
 ## Ubuntu ARM64 Container Setup
 
 ```docker pull --platform=linux/arm64 ubuntu:22.04```
-```docker run -it \
+
+```
+docker run -it \
   --name ubuntu-arm64-dev \
   --platform=linux/arm64 \
   -v $HOME/docker-work/ubuntu-arm64:/work \
   ubuntu:22.04 \
   bash
 ```
+
 ```docker start -ai ubuntu-arm64-dev```
 
 **Container Name**: `ubuntu-arm64-dev`
@@ -40,13 +45,16 @@
 ## Kali AMD64 Container Setup
 
 ```docker pull --platform=linux/amd64 kalilinux/kali-rolling```
-```docker run -it \
+
+```
+docker run -it \
   --name kali-amd64-sec \
   --platform=linux/amd64 \
   -v $HOME/docker-work/kali:/work \
   kalilinux/kali-rolling \
   bash
 ```
+
 ```docker start -ai kali-amd64-sec```
 
 **Container Name**: `kali-amd64-sec`
