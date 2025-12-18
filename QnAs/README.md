@@ -1,4 +1,4 @@
-# 🧠 Systems, OS, Networking & Architecture [[Source]](https://www.youtube.com/@nirlichtman)
+# 🧠 Systems, OS, Networking & Architecture [[Source1]](https://www.youtube.com/@nirlichtman), [[Source2]](https://www.youtube.com/@PowerCertAnimatedVideos)
 
 ---
 
