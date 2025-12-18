@@ -1,4 +1,4 @@
-# 🧠 Systems, OS, Networking & Architecture
+# 🧠 Systems, OS, Networking & Architecture [[Source]](https://www.youtube.com/@nirlichtman)
 
 ---
 
@@ -389,15 +389,15 @@ The "64" refers to:
 
 ---
 
-# 🦀 Interfacing Between Languages: Rust & C
+# 🦀 Interfacing Between Languages: Rust & C [[Source]](https://youtu.be/XJC5WB2Bwrc?si=BsyN0dlKaFoyXdj0)
 
 **(1) cross-language linking (Rust ↔ C)**
 **(2) object files & the linker**
 **(3) shared libraries (`.so`)**
 
-# PART 1 - How one language (Rust) calls another (C), and vice-versa
+## PART 1 - How one language (Rust) calls another (C), and vice-versa
 
-## Core idea (very important)
+### Core idea (very important)
 
 > **At link time, languages do not exist.**
 > Only **object files**, **symbols**, **ABIs**, and **calling conventions** exist.
@@ -412,7 +412,7 @@ If two languages:
 
 ---
 
-## What is the ABI doing here?
+### What is the ABI doing here?
 
 An **ABI (Application Binary Interface)** defines:
 
@@ -422,7 +422,7 @@ An **ABI (Application Binary Interface)** defines:
 - Who cleans up the stack
 - Name mangling rules
 
-### C ABI (on x86_64 Linux, System V ABI)
+#### C ABI (on x86_64 Linux, System V ABI)
 
 - First args in `rdi, rsi, rdx, rcx, r8, r9`
 - Return in `rax`
@@ -442,9 +442,9 @@ This tells Rust:
 
 ---
 
-# PART 2 - Example: Calling Rust from C
+## PART 2 - Example: Calling Rust from C
 
-## Step 1: Rust code (library)
+### Step 1: Rust code (library)
 
 ```rust
 // lib.rs
@@ -454,7 +454,7 @@ pub extern "C" fn add(a: i32, b: i32) -> i32 {
 }
 ```
 
-### Why each keyword matters
+#### Why each keyword matters
 
 - `extern "C"` → use C calling convention
 - `#[no_mangle]` → prevent Rust from renaming the symbol
@@ -464,7 +464,7 @@ pub extern "C" fn add(a: i32, b: i32) -> i32 {
 
 ## Step 2: Compile Rust to object or shared library
 
-### Object file
+#### Object file
 
 ```bash
 rustc --crate-type=staticlib lib.rs
@@ -490,7 +490,7 @@ liblib.so
 
 ---
 
-## Step 3: C code calling Rust
+### Step 3: C code calling Rust
 
 ```c
 // main.c
@@ -506,15 +506,15 @@ int main() {
 
 ---
 
-## Step 4: Link C with Rust output
+### Step 4: Link C with Rust output
 
-### Static linking
+#### Static linking
 
 ```bash
 gcc main.c -L. -llib -o main
 ```
 
-### Dynamic linking
+#### Dynamic linking
 
 ```bash
 gcc main.c -L. -llib -Wl,-rpath=. -o main
@@ -522,7 +522,7 @@ gcc main.c -L. -llib -Wl,-rpath=. -o main
 
 ---
 
-## What the linker is actually doing
+### What the linker is actually doing
 
 The linker:
 
@@ -536,9 +536,9 @@ No knowledge of Rust or C is needed.
 
 ---
 
-# PART 3 - Reverse: Calling C from Rust
+## PART 3 - Reverse: Calling C from Rust
 
-## C code
+### C code
 
 ```c
 // mul.c
@@ -555,7 +555,7 @@ gcc -c mul.c -o mul.o
 
 ---
 
-## Rust code
+### Rust code
 
 ```rust
 extern "C" {
@@ -571,7 +571,7 @@ fn main() {
 
 ---
 
-## Link them together
+### Link them together
 
 ```bash
 rustc main.rs mul.o
@@ -581,7 +581,7 @@ Rust hands everything to the **system linker (`ld`)**.
 
 ---
 
-# PART 4 - What exactly is an object file?
+## PART 4 - What exactly is an object file?
 
 An ELF `.o` file contains:
 
@@ -607,9 +607,9 @@ This is what the linker uses.
 
 ---
 
-# PART 5 - Shared Libraries (`.so`) explained deeply
+## PART 5 - Shared Libraries (`.so`) explained deeply
 
-## What is a shared library?
+### What is a shared library?
 
 A **shared library**:
 
@@ -621,7 +621,7 @@ A **shared library**:
 
 ---
 
-## How `.so` works at runtime
+### How `.so` works at runtime
 
 1. Program starts
 2. Kernel loads ELF
@@ -642,7 +642,7 @@ ldd ./main
 
 ---
 
-## Creating a shared library in C
+### Creating a shared library in C
 
 ```c
 // math.c
@@ -659,7 +659,7 @@ gcc -fPIC -shared math.c -o libmath.so
 
 ---
 
-## Using it
+### Using it
 
 ```c
 extern int square(int);
@@ -675,7 +675,7 @@ gcc main.c -L. -lmath -Wl,-rpath=. -o main
 
 ---
 
-## `-fPIC` - why it matters
+### `-fPIC` - why it matters
 
 PIC = Position Independent Code
 Required so:
@@ -685,7 +685,7 @@ Required so:
 
 ---
 
-## Static vs Shared (very important)
+### Static vs Shared (very important)
 
 | Feature | Static `.a`      | Shared `.so`            |
 | ------- | ---------------- | ----------------------- |
@@ -696,7 +696,7 @@ Required so:
 
 ---
 
-# PART 6 - How all this fits together mentally
+## PART 6 - How all this fits together mentally
 
 ```
 C source   Rust source
@@ -718,7 +718,7 @@ The linker only sees:
 
 ---
 
-# FINAL PART - Q&A (Focused, Insightful)
+## Q&A (Focused, Insightful)
 
 ---
 
