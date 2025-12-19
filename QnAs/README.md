@@ -1,7 +1,9 @@
 # Great Resources
 
 #### [[Core Dumped - Why Some Projects Use Multiple Programming Languages]](https://youtu.be/XJC5WB2Bwrc?si=BsyN0dlKaFoyXdj0)
+
 #### [[Nir Lichtman's YT Channel]](https://www.youtube.com/@nirlichtman)
+
 #### [[PowerCert Animated Videos]](https://www.youtube.com/@PowerCertAnimatedVideos)
 
 ---
@@ -206,7 +208,7 @@ LLVM is not magically OS-independent - it’s just better modularized.
 
 ---
 
-## 12. What exactly is a “cross-compiler”?
+## 12. What exactly is a "cross-compiler"?
 
 A compiler that:
 
@@ -276,11 +278,11 @@ That’s why:
 
 ---
 
-# 🧠 Systems, OS, Networking & Architecture
+# 🧠 Systems, OS & Architecture
 
 ---
 
-## 1. What is an "image" in computing?
+## 1. What is an "image"?
 
 **Q:** What does the term _image_ actually mean?
 
@@ -372,216 +374,7 @@ The kernel is **self-contained** and knows how to expand itself into RAM.
 
 ---
 
-## 5. What exactly is my home Wi-Fi "router"?
-
-**Q:** Is my home Wi-Fi device really a router?
-
-**A:**
-Yes - but not _only_ a router.
-
-It is **4 devices in one**:
-
-| Component               | OSI Layer |
-| ----------------------- | --------- |
-| Modem (DSL/Fiber/Cable) | L1–L2     |
-| Router (IP + NAT)       | L3        |
-| Ethernet switch         | L2        |
-| Wi-Fi Access Point      | L2        |
-
-That’s why it can:
-
-- Assign IPs
-- Route packets
-- Switch LAN traffic
-- Provide Wi-Fi
-
----
-
-## 6. Is my home router part of the Internet?
-
-**Q:** Is my router visible to the global Internet?
-
-**A:**
-
-- **WAN side:** Yes, it’s an **IP node in the ISP network**
-- **LAN side:** No, it creates a **private network**
-
-Your ISP sees your router as:
-
-- A **Customer Premises Equipment (CPE)**
-- Assigned an IP (often private or CGNAT)
-
----
-
-## 7. Why does my laptop have IP `192.168.x.x` but Google shows another IP?
-
-**Q:** Why two IPs?
-
-**A:**
-Because of **NAT (Network Address Translation)**.
-
-- `192.168.0.105` → **private LAN IP**
-- `117.235.41.78` → **public IP of ISP/NAT gateway**
-
-Your router (or ISP CGNAT) maps:
-
-```
-(private IP, private port) → (public IP, public port)
-```
-
----
-
-## 8. How many devices can my home network support?
-
-**Q:** How many devices can my subnet have?
-
-**A:**
-Given:
-
-```
-192.168.0.0/24
-```
-
-- Network bits: 24
-- Host bits: 8
-- Total addresses: `2⁸ = 256`
-- Usable devices: **254**
-
-So your LAN can have **~254 devices** simultaneously.
-
----
-
-## 9. I have 3 Wi-Fi routers at home - are they all "routers"?
-
-**Q:** Does my ISP configure 3 routers for my house?
-
-**A:**
-Usually **NO**.
-
-Common setups:
-
-### Case 1: One router + 2 access points
-
-- Only **one device does routing + DHCP**
-- Others act as **Wi-Fi APs**
-- Same IP pool everywhere
-
-### Case 2: Router-behind-router (bad design)
-
-- Each creates its own subnet
-- Causes **double NAT**
-- IP changes when switching Wi-Fi
-
-Most ISPs prefer **Case 1**.
-
----
-
-## 10. Do all Wi-Fi devices give me different IPs?
-
-**Q:** When I switch Wi-Fi devices, does my IP change?
-
-**A:**
-
-- **Local IP:** changes _per device_
-- **Subnet:** same (if APs are bridged)
-- **Public IP:** same (unless WAN changes)
-
-So:
-
-```
-Laptop → 192.168.0.105
-Phone  → 192.168.0.106
-```
-
-Same gateway, same NAT.
-
----
-
-## 11. How does the ISP assign IPs to home routers?
-
-**Q:** If WAN IPs aren’t global, how does ISP manage millions of users?
-
-**A:**
-Using **CGNAT (Carrier-Grade NAT)**.
-
-- Home routers get **private WAN IPs**
-- ISP edge routers share **public IPs**
-- NAT table tracks millions of connections
-
-Your visible IP is often **not your router**, but:
-
-> an **ISP edge NAT gateway**
-
----
-
-## 12. Why does a website say "Your ISP can see your traffic"?
-
-**Q:** How does it know I’m "unprotected"?
-
-**A:**
-Because:
-
-- Your traffic is **unencrypted at ISP level** (unless HTTPS/VPN)
-- ISP sees:
-
-  - IPs you connect to
-  - DNS queries
-  - Traffic volume
-
-HTTPS hides _content_, not _metadata_.
-
-VPN encrypts everything → ISP sees only encrypted tunnel.
-
----
-
-## 13. What is NAT in detail?
-
-**Q:** What exactly does NAT do?
-
-**A:**
-NAT maps:
-
-```
-(inside IP, inside port) → (outside IP, outside port)
-```
-
-Example:
-
-```
-192.168.0.10:54321 → 117.235.41.78:40001
-```
-
-Router maintains a **connection table**.
-
-This enables:
-
-- Many devices
-- One public IP
-- Stateful firewalling
-
----
-
-## 14. Is NAT limited to 65,536 connections?
-
-**Q:** Are we limited by port numbers?
-
-**A:**
-Yes - **per public IP per protocol**.
-
-- TCP ports: ~65k
-- UDP ports: ~65k
-
-But ISPs scale by:
-
-- Multiple public IPs
-- Port reuse
-- Short-lived connections
-
-This is why IPv6 exists.
-
----
-
-## 15. How does Linux execute machine code from ELF?
+## 5. How does Linux execute machine code from ELF?
 
 **Q:** How does kernel "run" machine instructions?
 
@@ -614,7 +407,7 @@ The kernel only:
 
 ---
 
-## 16. What does "64-bit architecture" actually mean?
+## 6. What does "64-bit architecture" actually mean?
 
 **Q:** What is the "64" in x86_64 or ARM64?
 
@@ -630,7 +423,7 @@ It does **not** limit SIMD.
 
 ---
 
-## 17. Then how can CPUs do 512-bit operations?
+## 7. Then how can CPUs do 512-bit operations?
 
 **Q:** If CPU is 64-bit, how does AVX-512 work?
 
@@ -653,17 +446,674 @@ The "64" refers to:
 
 ---
 
-## 18. Final Mental Model
+## 8. Final
 
 - **Firmware** starts execution
 - **Bootloader** loads kernel
 - **Kernel** maps memory, schedules processes
 - **CPU** executes instructions directly
-- **Router** routes packets (L3)
-- **Switch/AP** forward frames (L2)
-- **NAT** multiplexes connections
-- **IP** is logical, **MAC** is link-local
 - **64-bit** = scalar register & address width
+
+---
+
+# 🛜 Networks
+
+---
+
+# Basic Home Networking Q&A
+
+---
+
+## 1. What exactly is my home Wi-Fi "router"?
+
+**Q:** Is my home Wi-Fi device really a router?
+
+**A:**
+Yes - but not _only_ a router.
+
+It is **4 devices in one**:
+
+| Component               | OSI Layer |
+| ----------------------- | --------- |
+| Modem (DSL/Fiber/Cable) | L1–L2     |
+| Router (IP + NAT)       | L3        |
+| Ethernet switch         | L2        |
+| Wi-Fi Access Point      | L2        |
+
+That’s why it can:
+
+- Assign IPs
+- Route packets
+- Switch LAN traffic
+- Provide Wi-Fi
+
+---
+
+## 2. Is my home router part of the Internet?
+
+**Q:** Is my router visible to the global Internet?
+
+**A:**
+
+- **WAN side:** Yes, it’s an **IP node in the ISP network**
+- **LAN side:** No, it creates a **private network**
+
+Your ISP sees your router as:
+
+- A **Customer Premises Equipment (CPE)**
+- Assigned an IP (often private or CGNAT)
+
+---
+
+## 3. Why does my laptop have IP `192.168.x.x` but Google shows another IP?
+
+**Q:** Why two IPs?
+
+**A:**
+Because of **NAT (Network Address Translation)**.
+
+- `192.168.0.105` → **private LAN IP**
+- `117.235.41.78` → **public IP of ISP/NAT gateway**
+
+Your router (or ISP CGNAT) maps:
+
+```
+(private IP, private port) → (public IP, public port)
+```
+
+---
+
+## 4. How many devices can my home network support?
+
+**Q:** How many devices can my subnet have?
+
+**A:**
+Given:
+
+```
+192.168.0.0/24
+```
+
+- Network bits: 24
+- Host bits: 8
+- Total addresses: `2⁸ = 256`
+- Usable devices: **254**
+
+So your LAN can have **~254 devices** simultaneously.
+
+---
+
+## 5. I have 3 Wi-Fi routers at home - are they all "routers"?
+
+**Q:** Does my ISP configure 3 routers for my house?
+
+**A:**
+Usually **NO**.
+
+Common setups:
+
+### Case 1: One router + 2 access points
+
+- Only **one device does routing + DHCP**
+- Others act as **Wi-Fi APs**
+- Same IP pool everywhere
+
+### Case 2: Router-behind-router (bad design)
+
+- Each creates its own subnet
+- Causes **double NAT**
+- IP changes when switching Wi-Fi
+
+Most ISPs prefer **Case 1**.
+
+---
+
+## 6. Do all Wi-Fi devices give me different IPs?
+
+**Q:** When I switch Wi-Fi devices, does my IP change?
+
+**A:**
+
+- **Local IP:** changes _per device_
+- **Subnet:** same (if APs are bridged)
+- **Public IP:** same (unless WAN changes)
+
+So:
+
+```
+Laptop → 192.168.0.105
+Phone  → 192.168.0.106
+```
+
+Same gateway, same NAT.
+
+---
+
+## 7. How does the ISP assign IPs to home routers?
+
+**Q:** If WAN IPs aren’t global, how does ISP manage millions of users?
+
+**A:**
+Using **CGNAT (Carrier-Grade NAT)**.
+
+- Home routers get **private WAN IPs**
+- ISP edge routers share **public IPs**
+- NAT table tracks millions of connections
+
+Your visible IP is often **not your router**, but:
+
+> an **ISP edge NAT gateway**
+
+---
+
+## 8. Why does a website say "Your ISP can see your traffic"?
+
+**Q:** How does it know I’m "unprotected"?
+
+**A:**
+Because:
+
+- Your traffic is **unencrypted at ISP level** (unless HTTPS/VPN)
+- ISP sees:
+
+  - IPs you connect to
+  - DNS queries
+  - Traffic volume
+
+HTTPS hides _content_, not _metadata_.
+
+VPN encrypts everything → ISP sees only encrypted tunnel.
+
+---
+
+## 9. What is NAT in detail?
+
+**Q:** What exactly does NAT do?
+
+**A:**
+NAT maps:
+
+```
+(inside IP, inside port) → (outside IP, outside port)
+```
+
+Example:
+
+```
+192.168.0.10:54321 → 117.235.41.78:40001
+```
+
+Router maintains a **connection table**.
+
+This enables:
+
+- Many devices
+- One public IP
+- Stateful firewalling
+
+---
+
+## 10. Is NAT limited to 65,536 connections?
+
+**Q:** Are we limited by port numbers?
+
+**A:**
+Yes - **per public IP per protocol**.
+
+- TCP ports: ~65k
+- UDP ports: ~65k
+
+But ISPs scale by:
+
+- Multiple public IPs
+- Port reuse
+- Short-lived connections
+
+This is why IPv6 exists.
+
+---
+
+# Port forwarding, WAN vs LAN, CGNAT, Reachability
+
+---
+
+## Q1. When I configure port forwarding on my home router, what am I actually enabling?
+
+**Answer:**
+You are creating a **NAT mapping** on the router that says:
+
+> "Any incoming packet arriving on **my WAN interface** at port `X` should be rewritten and forwarded to **this internal LAN IP and port**."
+
+Port forwarding does **not** make your LAN IP public.
+It only instructs the router how to handle traffic **that already reaches the router from the Internet**.
+
+---
+
+## Q2. With what IP and port will someone on the Internet reach my service?
+
+**Answer:**
+They must connect to:
+
+```
+<router’s public WAN IP>:<external port>
+```
+
+They **cannot** use:
+
+- `192.168.0.1` (LAN gateway)
+- Your machine’s LAN IP
+- Any private IP
+
+Only **globally routable public IPs** work for inbound Internet traffic.
+
+---
+
+## Q3. Why is `192.168.0.1` unreachable from the Internet?
+
+**Answer:**
+`192.168.0.1` belongs to a **private address space (RFC 1918)**.
+Private IPs:
+
+- Are not globally unique
+- Are never routed on the public Internet
+- Exist only within local networks
+
+Routers on the Internet will **drop such packets immediately**.
+
+---
+
+## Q4. How do I know whether my router actually has a public WAN IP?
+
+**Answer:**
+Compare two values:
+
+1. **Router’s WAN IP** (from admin page)
+2. **Public IP seen by Internet** (`curl ifconfig.me`)
+
+- If they **match** → you likely have a public IP
+- If they **differ** → you are behind another NAT (usually CGNAT)
+
+---
+
+## Q5. Why does port forwarding fail when I am behind CGNAT?
+
+**Answer:**
+Because your router is **not the Internet edge**.
+
+In CGNAT:
+
+```
+Internet → ISP NAT → Your Router → Your Device
+```
+
+You control NAT on **your router**, but:
+
+- You do **not** control the ISP’s NAT
+- Incoming packets stop at the ISP
+- No mapping exists for your port
+
+Therefore, packets never reach your router.
+
+---
+
+## Q6. Can I forward ports on my router to bypass CGNAT?
+
+**Answer:**
+❌ No.
+Port forwarding only works on the **outermost NAT device**.
+
+Since the ISP owns the outer NAT:
+
+- You cannot configure it
+- You cannot expose ports
+- Your router never sees unsolicited inbound traffic
+
+This is a **hard limitation**, not a configuration issue.
+
+---
+
+## Q7. Why does outbound traffic always work, even behind CGNAT?
+
+**Answer:**
+NAT allows **stateful outbound connections**:
+
+```
+Your device → Internet  (allowed)
+Internet → Your device  (only if state exists)
+```
+
+When you initiate a connection:
+
+- NAT creates a temporary mapping
+- Replies are allowed back in
+
+Inbound connections **without prior state** are dropped.
+
+---
+
+## Q8. Why does a reverse tunnel work behind CGNAT?
+
+**Answer:**
+Because **you initiate the connection**.
+
+Flow:
+
+```
+Your machine → Public server (outbound)
+Public users → Public server → existing tunnel → you
+```
+
+Since the tunnel is outbound:
+
+- NAT allows it
+- The public server becomes your Internet-facing endpoint
+
+This flips the connectivity direction.
+
+---
+
+## Q9. Why does IPv6 solve the port-forwarding problem?
+
+**Answer:**
+IPv6 removes NAT entirely.
+
+- Each device gets a **globally routable IP**
+- No address sharing
+- No translation
+- Only firewall rules apply
+
+With IPv6:
+
+```
+[Your device IPv6]:5000  → reachable directly
+```
+
+This is how the Internet was originally designed to work.
+
+---
+
+## Q10. Why do ISPs use CGNAT despite breaking hosting?
+
+**Answer:**
+Because IPv4 addresses are exhausted.
+
+CGNAT allows:
+
+- Thousands of users per public IP
+- Cost savings
+- Simplified ISP operations
+
+The trade-off:
+
+- End users lose inbound reachability
+- Hosting services becomes difficult
+
+---
+
+# Traceroute
+
+---
+
+```
+traceroute google.com
+```
+
+```
+traceroute to google.com (142.250.182.14), 64 hops max, 40 byte packets
+ 1  192.168.0.1 (192.168.0.1)  3.830 ms  4.009 ms  3.397 ms
+ 2  192.168.1.1 (192.168.1.1)  3.455 ms  3.453 ms  3.462 ms
+ 3  triband-del-59.178.64.1.bol.net.in (59.178.64.1)  5.337 ms  6.973 ms  4.885 ms
+ 4  10.219.6.74 (10.219.6.74)  7.132 ms  6.555 ms  7.315 ms
+ 5  * * *
+ 6  * * *
+ 7  * * *
+ 8  * * *
+ 9  * * *
+10  * * *
+11  142.251.54.86 (142.251.54.86)  27.713 ms
+    142.251.52.230 (142.251.52.230)  20.557 ms
+    172.253.67.98 (172.253.67.98)  15.021 ms
+12  tzdelb-bf-in-f14.1e100.net (142.250.182.14)  13.405 ms
+    209.85.252.71 (209.85.252.71)  18.125 ms
+    142.251.255.54 (142.251.255.54)  19.328 ms
+```
+
+
+## Q1. What problem does `traceroute` actually solve?
+
+**Answer:**
+`traceroute` discovers the **layer-3 forwarding path** from your machine to a destination by exploiting the **TTL (Time To Live)** field in IP packets.
+
+It answers:
+
+> "Which routers decrement my packet’s TTL before it reaches the destination?"
+
+It does **not** measure bandwidth, throughput, or application performance.
+
+---
+
+## Q2. How does `traceroute` discover each hop?
+
+**Answer:**
+It sends packets with increasing TTL values:
+
+| TTL | What happens                                          |
+| --- | ----------------------------------------------------- |
+| 1   | First router drops packet → sends ICMP Time Exceeded  |
+| 2   | Second router drops packet → sends ICMP Time Exceeded |
+| …   | …                                                     |
+| N   | Destination replies (ICMP Echo or Port Unreachable)   |
+
+Each ICMP reply reveals the **IP address of that hop**.
+
+---
+
+## Q3. Why does each hop show **three time values**?
+
+**Answer:**
+By default, `traceroute` sends **three probe packets per TTL**.
+
+Each time value is the **round-trip time (RTT)** for one probe:
+
+```
+probe → router → ICMP reply → back to you
+```
+
+Multiple probes:
+
+- Reveal jitter
+- Detect packet loss
+- Improve confidence in measurements
+
+---
+
+## Q4. Are these times hop-to-hop delays?
+
+**Answer:**
+❌ No.
+
+They are **end-to-end RTTs from your machine to that hop**.
+
+So:
+
+- Hop 5 RTT includes time through hops 1–4
+- Hop 10 RTT includes time through hops 1–9
+
+Traceroute never measures:
+
+```
+hop N → hop N+1
+```
+
+---
+
+## Q5. Why do some hops show `* * *`?
+
+**Answer:**
+Because those routers **do not send ICMP TTL-expired replies**.
+
+Common reasons:
+
+- ICMP disabled or rate-limited
+- MPLS forwarding
+- Firewall policies
+- Control-plane protection
+
+Important:
+
+> `* * *` does **not** mean packet loss
+> It means **no diagnostic reply**
+
+---
+
+## Q6. Are packets still forwarded when hops are hidden?
+
+**Answer:**
+✅ Yes.
+
+Hidden routers:
+
+- Forward packets at hardware speed
+- Simply don’t respond to traceroute probes
+
+This is extremely common in:
+
+- ISP backbones
+- Cloud provider networks
+- Large enterprise cores
+
+---
+
+## Q7: What is happening at each hop in this `traceroute google.com` output?
+
+**Answer:**
+
+This traceroute shows how packets travel from **your laptop → home network → ISP → Google’s edge in Delhi**.
+Each numbered line is a **TTL boundary** where a router replied.
+
+---
+
+### **Hop 1**
+
+```
+1  192.168.0.1  3.8 ms  4.0 ms  3.4 ms
+```
+
+**What this is:**
+Your **home router (default gateway)**.
+
+**Why it appears:**
+First device that decrements TTL from 1 → 0.
+
+---
+
+### **Hop 2**
+
+```
+2  192.168.1.1  3.4 ms  3.4 ms  3.4 ms
+```
+
+**What this is:**
+Another **local network device** (secondary router / modem / ONT).
+
+**Key point:**
+Still inside your home or immediate ISP access network.
+
+---
+
+### **Hop 3**
+
+```
+3  triband-del-59.178.64.1.bol.net.in
+```
+
+**What this is:**
+Your **ISP’s edge router** in **Delhi**.
+
+**Why this matters:**
+This is where your traffic **enters the ISP’s public network**.
+
+---
+
+### **Hop 4**
+
+```
+4  10.219.6.74
+```
+
+**What this is:**
+An **internal ISP backbone router** using a private IP.
+
+**Why private IP is OK here:**
+ISPs commonly use RFC1918 addresses inside their core.
+
+---
+
+### **Hops 5–10**
+
+```
+5–10  * * *
+```
+
+**What this means:**
+Routers here:
+
+* Forward packets normally
+* **Do not send ICMP TTL-expired replies**
+
+**Important:**
+Traffic is **not lost** — these hops are simply **hidden**.
+
+This is typical inside:
+
+* ISP backbone
+* MPLS networks
+* Large provider cores
+
+---
+
+### **Hop 11**
+
+```
+11  142.251.54.86
+    142.251.52.230
+    172.253.67.98
+```
+
+**What this is:**
+You’ve **entered Google’s network**.
+
+**Why 3 IPs appear:**
+Google uses **ECMP (multiple equal-cost paths)**.
+Each probe hit a different Google router.
+
+**Latency drop (~15–27 ms):**
+You are very close to Google’s edge.
+
+---
+
+### **Hop 12 (Destination)**
+
+```
+12  tzdelb-bf-in-f14.1e100.net (142.250.182.14)
+```
+
+**What this is:**
+The **Google server** that answered `google.com`.
+
+**What `1e100.net` means:**
+Google-owned domain.
+
+**Why latency is low (~13 ms):**
+You are served from a **Google Delhi edge POP**.
+
+---
+
+## 🔑 One-line summary
+
+> **Home → ISP edge (Delhi) → hidden backbone → Google Delhi edge → google.com**
+
+Hidden hops don’t affect reachability — the **final RTT already includes everything**.
 
 ---
 
