@@ -1256,31 +1256,7 @@ Inside container:
 
 ---
 
-## Q12. Why is `/work` empty in my container?
-
-Because:
-
-- `$HOME/docker-work/ubuntu` is empty on your Mac
-
-Docker does **not** auto-populate it.
-
-Fix:
-
-```bash
-mkdir -p ~/docker-work/ubuntu
-touch ~/docker-work/ubuntu/test.txt
-```
-
-Then inside container:
-
-```bash
-ls /work
-# test.txt
-```
-
----
-
-## Q13. Can a container access all my host files?
+## Q12. Can a container access all my host files?
 
 **Only if you mount them explicitly.**
 
@@ -1301,7 +1277,7 @@ Inside container:
 
 ---
 
-## Q14. What kernel features make containers possible?
+## Q13. What kernel features make containers possible?
 
 Linux kernel provides:
 
@@ -1313,10 +1289,10 @@ Docker is mostly a **user-friendly wrapper** over these.
 
 ---
 
-## Q15. Basic Docker commands everyone should know
+## Q14. Basic Docker commands
 
 ```bash
-# Run a container
+# Run a container - interactive and tty
 docker run -it ubuntu bash
 
 # List running containers
