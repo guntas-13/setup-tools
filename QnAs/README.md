@@ -673,7 +673,7 @@ This is why IPv6 exists.
 
 ---
 
-# Port forwarding, WAN vs LAN, CGNAT, Reachability
+# Port forwarding, WAN vs LAN, CGNAT, Reachability [[Source]](https://www.youtube.com/watch?v=2G1ueMDgwxw)
 
 ---
 
@@ -850,7 +850,7 @@ The trade-off:
 
 ---
 
-# Traceroute
+# Traceroute [[Source]](https://youtu.be/vJV-GBZ6PeM?si=z9uTR2awQJGDyRyf)
 
 ---
 
@@ -877,7 +877,6 @@ traceroute to google.com (142.250.182.14), 64 hops max, 40 byte packets
     209.85.252.71 (209.85.252.71)  18.125 ms
     142.251.255.54 (142.251.255.54)  19.328 ms
 ```
-
 
 ## Q1. What problem does `traceroute` actually solve?
 
@@ -1058,17 +1057,17 @@ ISPs commonly use RFC1918 addresses inside their core.
 **What this means:**
 Routers here:
 
-* Forward packets normally
-* **Do not send ICMP TTL-expired replies**
+- Forward packets normally
+- **Do not send ICMP TTL-expired replies**
 
 **Important:**
 Traffic is **not lost** — these hops are simply **hidden**.
 
 This is typical inside:
 
-* ISP backbone
-* MPLS networks
-* Large provider cores
+- ISP backbone
+- MPLS networks
+- Large provider cores
 
 ---
 
