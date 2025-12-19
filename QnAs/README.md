@@ -1,4 +1,282 @@
-# 🧠 Systems, OS, Networking & Architecture [[Source1]](https://www.youtube.com/@nirlichtman), [[Source2]](https://www.youtube.com/@PowerCertAnimatedVideos)
+# Great Resources
+
+#### [[Core Dumped - Why Some Projects Use Multiple Programming Languages]](https://youtu.be/XJC5WB2Bwrc?si=BsyN0dlKaFoyXdj0)
+#### [[Nir Lichtman's YT Channel]](https://www.youtube.com/@nirlichtman)
+#### [[PowerCert Animated Videos]](https://www.youtube.com/@PowerCertAnimatedVideos)
+
+---
+
+# 💾 Compilers - OS-dependent or architecture-dependent?
+
+---
+
+## 1. Is a compiler OS-dependent or CPU-architecture-dependent?
+
+**Short answer:**
+**Both - but in different parts.**
+
+- The **compiler backend** is primarily **CPU-architecture dependent** (x86-64, ARM64, RISC-V).
+- The **toolchain as a whole** (compiler + assembler + linker + runtime) is **OS-dependent**.
+
+So a compiler is **not just one thing** - it’s a _pipeline_.
+
+---
+
+## 2. If two machines are both x86-64, can the same compiler output run on all OSes?
+
+**No.**
+Even on the same CPU architecture:
+
+- Linux
+- Windows
+- macOS
+
+**require different binaries.**
+
+Why?
+
+Because they differ in:
+
+- Executable format (ELF vs PE vs Mach-O)
+- System call interface
+- ABI (calling conventions, stack layout)
+- Runtime libraries (`glibc`, `msvcrt`, `libSystem`)
+
+---
+
+## 3. What part of the compiler actually cares about the CPU?
+
+The **backend**.
+
+This is where:
+
+- Instructions are chosen (`mov`, `add`, `jmp`)
+- Registers are allocated
+- Instruction scheduling is done
+
+Example:
+
+- x86-64 backend emits `mov rax, rbx`
+- ARM64 backend emits `mov x0, x1`
+
+This part is **OS-agnostic**.
+
+---
+
+## 4. What part of compilation is OS-dependent then?
+
+Everything _around_ the instructions:
+
+### OS-dependent components:
+
+- **ABI (Application Binary Interface)**
+- **Executable format**
+- **System libraries**
+- **Startup code**
+- **System call mechanism**
+
+Even the same instruction sequence must be wrapped differently depending on the OS.
+
+---
+
+## 5. What is an ABI and why does it matter?
+
+ABI defines:
+
+- How function arguments are passed
+- Which registers are caller/callee saved
+- Stack alignment
+- Name mangling rules
+- How system calls are invoked
+
+### Example (x86-64):
+
+| OS      | First function argument                |
+| ------- | -------------------------------------- |
+| Linux   | `rdi`                                  |
+| Windows | `rcx`                                  |
+| macOS   | `rdi` (but with other ABI differences) |
+
+So the compiler must **know the OS ABI** to generate correct code.
+
+---
+
+## 6. What happens if I take a Linux ELF binary and run it on Windows?
+
+It **won’t run**.
+
+Reasons:
+
+- Windows loader does not understand ELF
+- Windows kernel does not implement Linux syscalls
+- Runtime libraries are missing
+
+Even though the CPU instructions _might_ be valid.
+
+---
+
+## 7. Then why do people say “GCC targets x86-64”?
+
+Because **GCC has multiple targets**:
+
+```
+target = CPU architecture + OS + ABI
+```
+
+Examples:
+
+- `x86_64-linux-gnu`
+- `x86_64-w64-mingw32`
+- `aarch64-linux-gnu`
+
+Each target changes:
+
+- ABI rules
+- Linker behavior
+- Runtime expectations
+
+---
+
+## 8. Is the assembler OS-dependent?
+
+Yes.
+
+The assembler must emit:
+
+- ELF (Linux)
+- COFF/PE (Windows)
+- Mach-O (macOS)
+
+Same assembly → **different object file formats**.
+
+---
+
+## 9. Is the linker OS-dependent?
+
+Very much so.
+
+The linker:
+
+- Resolves symbols
+- Lays out sections
+- Produces final executable
+
+Each OS expects:
+
+- Different startup symbols (`_start`, `mainCRTStartup`)
+- Different dynamic loader paths
+- Different relocation formats
+
+---
+
+## 10. Where do system calls fit into this?
+
+System calls are **OS-specific**, not CPU-specific.
+
+Example: write to stdout
+
+### Linux:
+
+```asm
+mov rax, 1     ; SYS_write
+syscall
+```
+
+### Windows:
+
+```asm
+call WriteFile ; via kernel32.dll
+```
+
+Same CPU → completely different mechanism.
+
+---
+
+## 11. Why can LLVM/Clang feel "more portable" than GCC?
+
+Because LLVM:
+
+- Has a **clean IR**
+- Decouples frontends and backends more aggressively
+- Makes cross-compilation easier
+
+But **it still must respect OS ABI and formats**.
+
+LLVM is not magically OS-independent - it’s just better modularized.
+
+---
+
+## 12. What exactly is a “cross-compiler”?
+
+A compiler that:
+
+- Runs on **Host OS/Arch**
+- Produces binaries for **Target OS/Arch**
+
+Example:
+
+- Host: macOS ARM64
+- Target: Linux x86-64
+
+```
+clang --target=x86_64-linux-gnu
+```
+
+This is possible because:
+
+- CPU backend emits x86-64 instructions
+- Toolchain uses Linux ABI + ELF rules
+
+---
+
+## 13. Why do containers help with compilation portability?
+
+Because containers provide:
+
+- Target OS userland (headers, libc, linker)
+- Correct ABI expectations
+- Correct binary format
+
+But:
+
+- They **still use your host kernel**
+- They do **not emulate hardware** (unless QEMU is involved)
+
+---
+
+## 14. Final mental model
+
+### Think of compilation as layers:
+
+```
+Source Code
+   ↓
+Compiler Frontend (language-specific, OS-agnostic)
+   ↓
+IR Optimizations (OS-agnostic)
+   ↓
+Backend (CPU-specific)
+   ↓
+Assembler (OS-specific format)
+   ↓
+Linker (OS-specific ABI + runtime)
+   ↓
+Executable (OS + CPU bound)
+```
+
+---
+
+> **A compiler is CPU-aware at the instruction level, but OS-aware at the binary, ABI, and runtime level.**
+
+That’s why:
+
+- Same CPU ≠ same executable
+- Same source ≠ same binary
+- Same compiler ≠ same output across OSes
+
+---
+
+# 🧠 Systems, OS, Networking & Architecture
 
 ---
 
@@ -408,7 +686,7 @@ If two languages:
 2. Agree on **ABI** (how arguments are passed, how stack is used, name mangling)
 3. Expose compatible **symbols**
 
-👉 then they can be linked together.
+-then they can be linked together.
 
 ---
 
@@ -832,7 +1110,7 @@ ubuntu:22.04 image
 └── /etc
 ```
 
-👉 No kernel inside the image.
+-No kernel inside the image.
 
 ---
 
